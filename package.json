@@ -4,7 +4,8 @@
   "description": "Backup utility in JS",
   "main": "dist/index.js",
   "scripts": {
-    "start": "tsc && node ./dist/app.js"
+    "start": "npm run build:dev",
+    "build:dev": "nodemon --exec ./node_modules/.bin/ts-node -- ./src/app.ts"
   },
   "keywords": [
     "typescript",
@@ -17,6 +18,7 @@
   },
   "devDependencies": {
     "@types/node": "^10.5.4",
+    "@types/tar": "^4.0.0",
     "nodemon": "^1.18.3",
     "ts-node": "^7.0.0",
     "typescript": "^2.9.2"
