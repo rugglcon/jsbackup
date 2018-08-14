@@ -7,38 +7,40 @@ import * as readline from 'readline';
 import chalk from 'chalk';
 
 const argv = yargs
-    .usage('Usage: jsbackup [file1 file2 ... outfile|options]')
-    .example('$0 file1.txt file2.txt files.tar.gz',
+    .usage('Usage: jsbackup <option> [file1 file2 ... outfile]')
+    .example('$0 -c file1.txt file2.txt files.tar.gz',
         'compresses file1.txt and file2.txt into files.tar.gz')
-    .example('$0',
-        'this will start a prompt to enter a list of files and then an output file')
+    .example('$0 -x files.tar.gz', 'extracts files.tar.gz to files/')
+    .alias('x', 'extract')
+    .alias('c', 'compress')
+    .demandCommand(1)
     .help('h')
     .alias('h', 'help')
     .version()
     .argv;
 
+function error(err: string): void {
+    console.error(chalk.bold.red(err));
+    process.exit(1);
+}
+
 function commandLine(): void {
+    const compress = argv.c;
+    const extract = argv.x;
+    if (compress && extract) {
+        error('Cannot have both \'x\' and \'c\'. Exiting.');
+    }
     let fileList: Array<string>;
     let outFile: string;
 
     if (argv._.length === 1) {
-        yargs.showHelp();
-        console.error(chalk.bold.red('Incorrect number of arguments; either 0 or more than 1. Exiting.'));
-        process.exit(1);
-    } else if (argv._.length === 0) {
-        const rl = readline.createInterface({
-            input: process.stdin,
-            output: process.stdout
-        });
-
-        rl.question(chalk.green.bold('Please list the files you would like '
-            + 'compressed followed by the file to compress them to: '), list => {
-            fileList = list.split(' ');
-            outFile = fileList.pop();
-            compressFiles(fileList, outFile).then(() => {
-                console.log(chalk.bold.green('done'));
-                rl.close();
-            });
+        if (compress) {
+            error('Need at least 2 arguments for compression; received 1. Exiting.');
+        }
+        outFile = argv._.pop();
+        extractTarball(outFile).then(() => {
+            console.log(chalk.bold.green('done'));
+            process.exit(0);
         });
     } else {
         fileList = argv._.slice(0);
@@ -47,6 +49,16 @@ function commandLine(): void {
             console.log(chalk.bold.green('done'));
         });
     }
+}
+
+/**
+ * Extracts the given tarball
+ * @param file tarball to extract
+ */
+export function extractTarball(file: string): Promise<void> {
+    return tar.extract({
+        file: file
+    });
 }
 
 /**
