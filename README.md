@@ -45,9 +45,8 @@ Examples:
 # providing files to the program
 $ jsbackup file1.txt file2.txt out.tar.gz
 
-# using the prompt
-$ jsbackup
-Please list the files you would like compressed followed by the file to compress them to: file1.txt file2.txt out.tar.gz
+# extracting files
+$ jsbackup out.tar.gz
 ```
 
 ## Running the tests
