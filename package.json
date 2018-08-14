@@ -1,6 +1,6 @@
 {
   "name": "jsbackup",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Backup utility in pure TypeScript",
   "main": "src/app.ts",
   "repository": {
