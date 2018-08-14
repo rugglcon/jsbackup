@@ -6,7 +6,13 @@ import * as yargs from 'yargs';
 import * as readline from 'readline';
 import chalk from 'chalk';
 
-const argv = yargs
+function error(err: string): void {
+    console.error(chalk.bold.red(err));
+    process.exit(1);
+}
+
+function commandLine(): void {
+    const argv = yargs
     .usage('Usage: jsbackup <option> [file1 file2 ... outfile]')
     .example('$0 -c file1.txt file2.txt files.tar.gz',
         'compresses file1.txt and file2.txt into files.tar.gz')
@@ -19,12 +25,6 @@ const argv = yargs
     .version()
     .argv;
 
-function error(err: string): void {
-    console.error(chalk.bold.red(err));
-    process.exit(1);
-}
-
-function commandLine(): void {
     const compress = argv.c;
     const extract = argv.x;
     if (compress && extract) {
