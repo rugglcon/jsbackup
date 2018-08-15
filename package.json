@@ -11,7 +11,8 @@
     "test": "jest --env=node",
     "build": "tslint src/**/*.ts && tsc",
     "ci": "npm test && npm run build",
-    "dev": "npm run build && sudo npm link"
+    "dev": "npm run build && sudo npm link",
+    "deploy": "./deploy.sh"
   },
   "keywords": [
     "typescript",

@@ -6,7 +6,7 @@ MESSAGE=""
 npm run ci
 if [ $? -neq 0 ]; then
     "Build failed. Exiting."
-done
+fi
 
 echo "Deploy process started"
 echo ""
