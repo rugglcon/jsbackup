@@ -1,4 +1,6 @@
-# jsbackup [![Build Status](https://travis-ci.org/travis-ci/travis.rb.svg?branch=master)](https://travis-ci.org/rugglcon/jsbackup)
+# jsbackup
+[![Build Status](https://travis-ci.org/travis-ci/travis.rb.svg?branch=master)](https://travis-ci.org/rugglcon/jsbackup)
+[![npm version](https://img.shields.io/npm/v/jsbackup.svg)](https://www.npmjs.com/package/jsbackup)
 
 A backup utility written in pure TypeScript.
 
@@ -19,8 +21,6 @@ npm test
 
 ### Installing
 
-Working on publishing to `npm`, however once that's done:
-
 Install locally from `npm`:
 
 ```
@@ -36,7 +36,7 @@ npm install -g jsbackup
 Or install from the cloned repo:
 
 ```
-npm link
+npm run dev
 ```
 
 Examples:
