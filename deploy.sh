@@ -28,6 +28,6 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-git push --tags
+git push && git push --tags
 
 npm publish
