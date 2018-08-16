@@ -1,23 +1,35 @@
 #!/usr/bin/env bash
 
-TAG=""
-MESSAGE=""
+VERSION=""
 
 npm run ci
-if [ $? -neq 0 ]; then
-    "Build failed. Exiting."
+if [ $? -ne 0 ]; then
+    echo "Build failed. Exiting."
+    exit 1
 fi
 
 echo "Deploy process started"
 echo ""
 
-echo "Did you update the version in package.json?"
-read -p "Press [Enter] if you did."
+read -e -p 'Enter version type (major, minor, patch): ' VERSION
 
-read -e -p 'Enter tag: ' TAG
-read -e -p 'Enter message: ' MESSAGE
+if [ "$VERSION" = "major" ]; then
+    npm version major
+elif [ "$VERSION" = "minor" ]; then
+    npm version minor
+elif [ "$VERSION" = "patch" ]; then
+    npm version patch
+else
+    echo "incorrect version option."
+    exit 1
+fi
+if [ $? -ne 0 ]; then
+    echo "npm error"
+    exit 1
+fi
+echo "yay"
+exit
 
-git tag -a "v$TAG" -m "$MESSAGE"
 git push --tags
 
 npm publish
