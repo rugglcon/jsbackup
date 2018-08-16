@@ -27,8 +27,6 @@ if [ $? -ne 0 ]; then
     echo "npm error"
     exit 1
 fi
-echo "yay"
-exit
 
 git push --tags
 
