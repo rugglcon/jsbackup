@@ -41,17 +41,50 @@ npm run dev
 
 Examples:
 
-```shell
+```sh
 # providing files to the program
-$ jsbackup file1.txt file2.txt out.tar.gz
+$ jsbackup -c out.tar.gz file1.txt file2.txt
 
 # extracting files
-$ jsbackup out.tar.gz
+$ jsbackup -x out.tar.gz
+```
+
+```typescript
+import { compressFiles, extractTarball } from 'jsbackup';
+
+// compresses a list of files
+// Promise chaining example
+compressFiles('foo.tar.gz', 'foo.txt').then(() => {
+    console.log('Compressed files!');
+}).catch(err => {
+    console.error('Oh no!');
+});
+
+// using async/await
+await compressFiles('foo.tar.gz', 'foo.txt');
+
+// extracts a tarball
+// Promise chaining example
+extractTarball('foo.tar.gz').then(() => {
+    console.log('Extracted files!');
+}).catch(err => {
+    console.error('Oh no!');
+});
+
+// using async/await
+await extractTarball('foo.tar.gz');
 ```
 
 ## Running the tests
 
 [`jest`](https://github.com/facebook/jest) is used to test `jsbackup`. To run the automated test suites, run `npm test`.
+
+## Roadmap
+
+* Support more types of compression (`zip`, `bz2`, `7z`, etc.)
+    * Extraction goes along with those
+* Support extracting to a specific directory
+* Support extracting more than 1 file at a time
 
 ## Contributing
 
