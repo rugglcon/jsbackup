@@ -1,6 +1,6 @@
 import * as fs from 'fs-extra';
 import * as path from 'path';
-import { compressFiles, extractTarball } from '../src/index';
+import { compressFiles, extractArchive } from '../src/index';
 
 describe('jsbackup', () => {
 
@@ -15,9 +15,9 @@ describe('jsbackup', () => {
         });
     });
 
-    it('should compress a list of files', async () => {
+    it('should compress a list of files to .tar.gz', async () => {
         const out = 'app.spec.ts.tar.gz';
-        await compressFiles(out, 'index.spec.ts');
+        await compressFiles('tar.gz', out, 'index.spec.ts');
         const ex = await fs.pathExists(out);
         expect(ex).toBeTruthy();
         await fs.remove(out);
@@ -25,7 +25,7 @@ describe('jsbackup', () => {
 
     it('should fail if file does not exist', async () => {
         try {
-            await compressFiles('out.tar.gz', 'foo.bar');
+            await compressFiles('tar.gz', 'out.tar.gz', 'foo.bar');
             expect(true).toBeFalsy();
         } catch (err) {
             expect(err).toBeDefined();
@@ -36,9 +36,30 @@ describe('jsbackup', () => {
         const out = 'test.tar.gz';
         const iN = 'test';
         fs.createFileSync(iN);
-        await compressFiles(out, iN);
+        await compressFiles('tar.gz', out, iN);
         fs.unlinkSync(iN);
-        await extractTarball(out);
+        await extractArchive('tar.gz', out);
+        const ex = await fs.pathExists(out);
+        expect(ex).toBeTruthy();
+        await fs.remove(out);
+        await fs.remove(iN);
+    });
+
+    it('should compress a list of files to .zip', async () => {
+        const out = 'index.spec.ts.zip';
+        await compressFiles('zip', out, 'index.spec.ts');
+        const ex = await fs.pathExists(out);
+        expect(ex).toBeTruthy();
+        await fs.remove(out);
+    });
+
+    it('should extract a single .zip', async () => {
+        const out = 'test.zip';
+        const iN = 'test';
+        fs.createFileSync(iN);
+        await compressFiles('zip', out, iN);
+        fs.unlinkSync(iN);
+        await extractArchive('zip', out);
         const ex = await fs.pathExists(out);
         expect(ex).toBeTruthy();
         await fs.remove(out);
