@@ -13,6 +13,8 @@ describe('jsbackup', () => {
         files.filter(x => !x.endsWith('spec.ts')).forEach(async z => {
             await fs.remove(z);
         });
+        await fs.remove('test');
+        await fs.remove('../test');
     });
 
     it('should compress a list of files to .tar.gz', async () => {
