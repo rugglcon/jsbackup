@@ -2,4 +2,3 @@ src/
 deploy.sh
 __tests__/
 .github/
-.travis.yml
