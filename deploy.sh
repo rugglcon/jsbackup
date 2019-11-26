@@ -29,5 +29,3 @@ if [ $? -ne 0 ]; then
 fi
 
 git push && git push --tags
-
-npm publish

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-import * as fs from 'fs-extra';
-import * as tar from 'tar';
-import * as path from 'path';
+import { existsSync, mkdirp } from 'fs-extra';
+import { extract as extractTar, create as createTar } from 'tar';
+import { dirname } from 'path';
 import * as yargs from 'yargs';
 import * as AdmZip from 'adm-zip';
 import chalk from 'chalk';
@@ -25,7 +25,7 @@ const error = (err: string) => {
  * @param file the full path to the file to check
  */
 const checkExists = (file: string) => {
-    if (!fs.existsSync(file)) {
+    if (!existsSync(file)) {
         throw new Error(`jsbackup: ${file} does not exist.`);
     }
 };
@@ -100,13 +100,13 @@ async function commandLine(): Promise<void> {
  * @param file tarball to extract
  */
 async function extractTarball(file: string): Promise<void> {
-    await tar.extract({
+    await extractTar({
         file: file
     });
 }
 
 async function extractZip(file: string): Promise<void> {
-    if (!fs.existsSync(file)) {
+    if (!existsSync(file)) {
         throw new Error(`jsbackup: File not found: ${file}`);
     }
     const zip = new AdmZip(file);
@@ -132,7 +132,7 @@ async function compressTarGz(outfile: string, files: string[]): Promise<void> {
         error(`Invalid extension given to compress to tar.gz. Expected tar.gz, received: ${tar2}.${gz}. Exiting.`);
     }
 
-    await tar.create({
+    await createTar({
         gzip: true,
         file: outfile
     }, files);
@@ -163,8 +163,8 @@ export async function extractArchive(type: ArchiveType, file: string): Promise<v
  * @param outfile name of the outputted archive
  */
 export async function compressFiles(type: ArchiveType, outfile: string, ...files: string[]): Promise<void> {
-    if (!fs.existsSync(path.dirname(outfile))) {
-        await fs.mkdirp(path.dirname(outfile));
+    if (!existsSync(dirname(outfile))) {
+        await mkdirp(dirname(outfile));
     }
 
     files.forEach(checkExists);

@@ -1,28 +1,34 @@
-import * as fs from 'fs-extra';
-import * as path from 'path';
+import {
+    readdir,
+    remove,
+    pathExists,
+    createFileSync,
+    unlinkSync
+} from 'fs-extra';
+import { dirname } from 'path';
 import { compressFiles, extractArchive } from '../src/index';
 
 describe('jsbackup', () => {
 
     beforeEach(() => {
-        process.chdir(path.dirname(__filename));
+        process.chdir(dirname(__filename));
     });
 
     afterEach(async () => {
-        const files = await fs.readdir('.');
+        const files = await readdir('.');
         files.filter(x => !x.endsWith('spec.ts')).forEach(async z => {
-            await fs.remove(z);
+            await remove(z);
         });
-        await fs.remove('test');
-        await fs.remove('../test');
+        await remove('test');
+        await remove('../test');
     });
 
     it('should compress a list of files to .tar.gz', async () => {
         const out = 'app.spec.ts.tar.gz';
         await compressFiles('tar.gz', out, 'index.spec.ts');
-        const ex = await fs.pathExists(out);
+        const ex = await pathExists(out);
         expect(ex).toBeTruthy();
-        await fs.remove(out);
+        await remove(out);
     });
 
     it('should fail if file does not exist', async () => {
@@ -37,34 +43,34 @@ describe('jsbackup', () => {
     it('should extract a single tarball', async () => {
         const out = 'test.tar.gz';
         const iN = 'test';
-        fs.createFileSync(iN);
+        createFileSync(iN);
         await compressFiles('tar.gz', out, iN);
-        fs.unlinkSync(iN);
+        unlinkSync(iN);
         await extractArchive('tar.gz', out);
-        const ex = await fs.pathExists(out);
+        const ex = await pathExists(out);
         expect(ex).toBeTruthy();
-        await fs.remove(out);
-        await fs.remove(iN);
+        await remove(out);
+        await remove(iN);
     });
 
     it('should compress a list of files to .zip', async () => {
         const out = 'index.spec.ts.zip';
         await compressFiles('zip', out, 'index.spec.ts');
-        const ex = await fs.pathExists(out);
+        const ex = await pathExists(out);
         expect(ex).toBeTruthy();
-        await fs.remove(out);
+        await remove(out);
     });
 
     it('should extract a single .zip', async () => {
         const out = 'test.zip';
         const iN = 'test';
-        fs.createFileSync(iN);
+        createFileSync(iN);
         await compressFiles('zip', out, iN);
-        fs.unlinkSync(iN);
+        unlinkSync(iN);
         await extractArchive('zip', out);
-        const ex = await fs.pathExists(out);
+        const ex = await pathExists(out);
         expect(ex).toBeTruthy();
-        await fs.remove(out);
-        await fs.remove(iN);
+        await remove(out);
+        await remove(iN);
     });
 });
