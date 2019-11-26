@@ -1,6 +1,6 @@
 {
   "name": "jsbackup",
-  "version": "3.2.2",
+  "version": "3.2.3",
   "description": "Backup utility in pure TypeScript",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
