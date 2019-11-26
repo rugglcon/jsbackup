@@ -41,6 +41,6 @@ jobs:
           registry-url: https://npm.pkg.github.com/
           scope: '@rugglcon'
       - run: npm ci
-      - run: npm publish -reg https://npm.pkg.github.com/
+      - run: npm publish -reg https://npm.pkg.github.com/rugglcon
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
