@@ -1,5 +1,5 @@
 {
-  "name": "jsbackup",
+  "name": "@rugglcon/jsbackup",
   "version": "3.2.5",
   "description": "Backup utility in pure TypeScript",
   "main": "dist/index.js",
