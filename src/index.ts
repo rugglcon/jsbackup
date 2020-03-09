@@ -4,7 +4,7 @@ import { extract as extractTar, create as createTar } from 'tar';
 import { dirname } from 'path';
 import * as yargs from 'yargs';
 import * as AdmZip from 'adm-zip';
-import chalk from 'chalk';
+import { bold } from 'chalk';
 
 /**
  * All types of archives this supports
@@ -16,8 +16,7 @@ export type ArchiveType = 'zip' | 'tar.gz';
  * @param err the error to write to the console
  */
 const error = (err: string) => {
-    console.error(`jsbackup: ${chalk.bold.red(err)}`);
-    process.exit(1);
+    throw new Error(err);
 };
 
 /**
@@ -32,26 +31,26 @@ const checkExists = (file: string) => {
 
 async function commandLine(): Promise<void> {
     const argv = yargs
-    .usage('Usage: jsbackup -t <tar.gz|zip> <option> [[outfile file1 file2 ...] | [archive]]')
-    .example('$0 -t tar.gz -c files.tar.gz file1.txt file2.txt',
-        'compresses file1.txt and file2.txt into files.tar.gz')
-    .example('$0 -t tar.gz -x files.tar.gz', 'extracts files.tar.gz to files/')
-    .boolean('c')
-    .boolean('x')
-    .string('t')
-    .describe('t', 'the type of archive to extract/compress')
-    .describe('c', 'compress a list of files')
-    .describe('x', 'extract a tarball')
-    .alias('t', 'type')
-    .alias('x', 'extract')
-    .alias('c', 'compress')
-    .nargs('t', 1)
-    .demandCommand(1)
-    .demandOption('t')
-    .help('h')
-    .alias('h', 'help')
-    .version()
-    .argv;
+        .usage('Usage: jsbackup -t <tar.gz|zip> <option> [[outfile file1 file2 ...] | [archive]]')
+        .example('$0 -t tar.gz -c files.tar.gz file1.txt file2.txt',
+            'compresses file1.txt and file2.txt into files.tar.gz')
+        .example('$0 -t tar.gz -x files.tar.gz', 'extracts files.tar.gz to files/')
+        .boolean('c')
+        .boolean('x')
+        .string('t')
+        .describe('t', 'the type of archive to extract/compress')
+        .describe('c', 'compress a list of files')
+        .describe('x', 'extract a tarball')
+        .alias('t', 'type')
+        .alias('x', 'extract')
+        .alias('c', 'compress')
+        .nargs('t', 1)
+        .demandCommand(1)
+        .demandOption('t')
+        .help('h')
+        .alias('h', 'help')
+        .version()
+        .argv;
 
     const compress = argv.c;
     const extract = argv.x;
@@ -61,36 +60,35 @@ async function commandLine(): Promise<void> {
         'zip'
     ];
     if (compress && extract) {
-        error('Cannot have both \'x\' and \'c\'. Exiting.');
+        error('Cannot have both \'x\' and \'c\'.');
     }
 
     if (!type || !acceptableTypes.includes(type)) {
-        error(`You must give a valid type. Type given: ${type}. Exiting.`);
+        error(`You must give a valid type. Type given: ${type}.`);
     }
 
-    let fileList: Array<string>;
-    let outFile: string;
-
     if (compress) {
-        if (argv._.length <= 1) {
-            error(`Need at least 2 arguments for compression; receieved ${argv._.length}. Exiting.`);
+        if (argv._.length < 2) {
+            error(`Need at least 2 arguments for compression; receieved ${argv._.length}.`);
         }
 
-        fileList = argv._.slice(0);
-        outFile = fileList.shift();
-        await compressFiles(type as ArchiveType, outFile, ...fileList);
-        console.log(chalk.bold.green('done'));
+        const fileList = argv._.slice(0);
+        const outFile = fileList.shift();
+
+        await compressFiles(type as ArchiveType, outFile as string, ...fileList);
+        console.log(bold.green('done'));
         process.exit(0);
     }
 
     if (extract) {
         if (argv._.length !== 1) {
-            error(`Can only have one argument for extraction but receieved ${argv._.length}. Exiting.`);
+            error(`Can only have one argument for extraction but receieved ${argv._.length}.`);
         }
 
-        outFile = argv._.pop();
-        await extractArchive(type as ArchiveType, outFile);
-        console.log(chalk.bold.green('done'));
+        const outFile = argv._.pop();
+
+        await extractArchive(type as ArchiveType, outFile as string);
+        console.log(bold.green('done'));
         process.exit(0);
     }
 }
@@ -116,7 +114,7 @@ async function extractZip(file: string): Promise<void> {
 async function compressZip(outfile: string, files: string[]): Promise<void> {
     const extension = outfile.split('.').pop();
     if (extension !== 'zip') {
-        error(`Invalid extension given to compress to .zip. Expected .zip, received: ${extension}. Exiting.`);
+        error(`Invalid extension given to compress to .zip. Expected .zip, received: ${extension}.`);
     }
 
     const zip = new AdmZip();
@@ -129,7 +127,7 @@ async function compressTarGz(outfile: string, files: string[]): Promise<void> {
     const gz = parts.pop();
     const tar2 = parts.pop();
     if (gz !== 'gz' && tar2 !== 'tar') {
-        error(`Invalid extension given to compress to tar.gz. Expected tar.gz, received: ${tar2}.${gz}. Exiting.`);
+        error(`Invalid extension given to compress to tar.gz. Expected tar.gz, received: ${tar2}.${gz}.`);
     }
 
     await createTar({

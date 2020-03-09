@@ -7,7 +7,11 @@
         "target": "es6",
         "outDir": "./dist",
         "baseUrl": "./src",
-        "declaration": true
+        "declaration": true,
+        "noUnusedParameters": true,
+        "noUnusedLocals": true,
+        "strict": true,
+        "strictNullChecks": true
     },
     "include": [
         "src/**/*.ts"

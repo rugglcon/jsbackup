@@ -12,12 +12,13 @@ These instructions will get you a copy of the project up and running on your loc
 git clone https://github.com/rugglcon/jsbackup
 cd jsbackup
 npm install
+nvm use // this ensures you're always using a supported version of node
 npm test
 ```
 
 ### Prerequisites
 
-`npm` and `nodejs` are the only requirements.
+`nvm`, `npm` and `nodejs` are the only requirements.
 
 ### Installing
 

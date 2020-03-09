@@ -8,6 +8,8 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+read -e "Did you commit your changes?"
+
 echo "Deploy process started"
 echo ""
 
