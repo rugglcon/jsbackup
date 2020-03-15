@@ -30,6 +30,8 @@
     "jsbackup": "./dist/index.js"
   },
   "dependencies": {
+    "7z-extract": "0.0.3",
+    "7zip-bin": "^5.0.3",
     "adm-zip": "^0.4.14",
     "chalk": "^3.0.0",
     "fs-extra": "^8.1.0",
@@ -59,12 +61,10 @@
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
     },
-    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(js?|ts?)$",
     "moduleFileExtensions": [
       "ts",
-      "tsx",
       "js",
-      "jsx",
       "json",
       "node"
     ]

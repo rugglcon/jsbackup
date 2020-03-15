@@ -3,7 +3,6 @@
         "module": "commonjs",
         "moduleResolution": "node",
         "pretty": true,
-        "sourceMap": true,
         "target": "es6",
         "outDir": "./dist",
         "baseUrl": "./src",
@@ -11,7 +10,8 @@
         "noUnusedParameters": true,
         "noUnusedLocals": true,
         "strict": true,
-        "strictNullChecks": true
+        "strictNullChecks": true,
+        "esModuleInterop": true
     },
     "include": [
         "src/**/*.ts"

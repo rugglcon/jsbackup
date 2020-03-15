@@ -82,8 +82,9 @@ await extractTarball('foo.tar.gz');
 
 ## Roadmap
 
-* Support more types of compression (`zip`, `bz2`, `7z`, etc.)
+* Support more types of compression (~~`zip`~~, `bz2`, ~~`7z`~~, etc.)
     * Extraction goes along with those
+    * **NOTE:** There is no good package to work with 7zip files, so this is being put on the backlog.
 * Support extracting to a specific directory
 * Support extracting more than 1 file at a time
 
