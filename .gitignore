@@ -2,6 +2,9 @@ node_modules
 dist
 .vscode
 **/*.tar.gz
-!test.tar.gz
 **/*.zip
+**/*.7z
+!test.tar.gz
+!test.zip
+!test.7z
 coverage/
